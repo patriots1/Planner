@@ -12,12 +12,14 @@ def index(request):
 
 def list_view(request):
     return render(request, "list/list_view.html", {
-        "content": ListModel.objects.all()
+        "content": ListModel.objects.all(),
+        "callback": "list"
     })
 
 def entry_add(request):
     # render 'list' if no callback is provided
     callback = request.GET.get('callback', 'list')
+    priority = int(request.GET.get('priority', '0'))
     if request.method == "GET":
         # add a new entry
         return render(request, "list/entry_edit.html", {
@@ -41,7 +43,10 @@ def entry_add(request):
             priority=priority,
             due_date=due_date
         )
-        return redirect(reverse(callback))
+        if priority == 0:
+            return redirect(reverse(callback))
+        else:
+            return redirect("priority", priority = priority)
 
     return HttpResponseBadRequest("Invalid request method.")
 
@@ -88,4 +93,20 @@ def entry_edit(request, entry_id):
 def entry(request, entry_id):
     return render(request, "list/entry.html", {
         "entry": ListModel.objects.filter(id = entry_id).first()
+    })
+
+def priority_sort(request, priority):
+    if priority < 1 or priority > 3:
+        return HttpResponseBadRequest("priority can only be between 1 (low) and 3 (high)")
+    content = None
+    if priority == 1:
+        content = ListModel.objects.filter(priority = 1)
+    elif priority == 2:
+        content = ListModel.objects.filter(priority = 2)
+    elif priority == 3:
+        content = ListModel.objects.filter(priority = 3)
+    return render(request, "list/list_view.html", {
+        "content": content,
+        "callback": "priority",
+        "priority": priority
     })

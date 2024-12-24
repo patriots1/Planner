@@ -10,6 +10,11 @@
         {% empty %} <!--to indicate an empty list-->
             <li>Please add tasks to To Do List</li>
     {% endfor %}
-    <a href="{% url 'add' %}?callback=list">Add a new entry</a>
+    {% if priority %}
+        <a href="{% url 'add' %}?callback={{ callback|urlencode }}?priority={{ priority|urlencode }}">Add a new entry</a>
+    {% else %}
+        <a href="{% url 'add' %}?callback={{ callback|urlencode }}">Add a new entry</a>
+    {% endif %}
+    <div>Remove entries from to-do list</div> <!--enable support for this-->
 </ul>
 {% endblock %}

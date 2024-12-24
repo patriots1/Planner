@@ -20,14 +20,8 @@
     {% else %}
         <form action="{% url 'edit' id %}" method="post">
             {% csrf_token %}
-            <p>start</p>
             {{ form }}
-            <p>end</p>
             <input type="submit">
         </form>
     {% endif %}
-        <!-- {% csrf_token %}
-        {{ form }}
-        <button type="submit">{% if entry_add %}Add Entry{% else %}Edit Entry{% endif %}</button>
-    </form> -->
 {% endblock %}

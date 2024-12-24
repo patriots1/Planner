@@ -7,9 +7,16 @@
         <a href="{% url 'list' %}">View all entries</a>
         <!--High Priority = Red , Medium Priority = Yellow ... -->
         <li>View entries by date</li>
-        <li>View High Priority entries</li>
-        <li>View Medium Priority entries</li>
-        <li>View Low Priority entries</li>
+        <!-- <li>View High Priority entries</li> -->
+        <li>
+            <a href="{% url 'priority' 3 %}">View High Priority entries</a>
+        </li>
+        <li>
+            <a href="{% url 'priority' 2 %}">View Medium Priority entries</a>
+        </li>
+        <li>
+            <a href="{% url 'priority' 1 %}">View Low Priority entries</a>
+        </li>
         <li>View completed entries</li>
     </li>
 </ul>

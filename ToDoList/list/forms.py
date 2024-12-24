@@ -80,3 +80,20 @@ class EditSelectForm(forms.Form):
         label="Select The Fields to Edit",
         required=True,
     )
+
+class DateSelectForm(forms.Form):
+    ascending = forms.BooleanField(label="Ascending", required=False)
+    date_sort = forms.DateField(label="Due Date", widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    descending = forms.BooleanField(label="Descending", required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        ascending = cleaned_data.get('ascending')
+        date_sort = cleaned_data.get('date_sort')
+        descending = cleaned_data.get('descending')
+        selected_fields = [field for field in [ascending, date_sort, descending] if field]
+        if len(selected_fields) > 1:
+            raise forms.ValidationError("You can only select one field to edit at a time.")
+        if len(selected_fields) == 0:
+            raise forms.ValidationError("Please select at least one field to edit.")
+        return cleaned_data
