@@ -9,6 +9,7 @@
     <li>Priority: {{ entry.priority }}</li>
     <li>Due Date: {{ entry.due_date }}</li>
     <a href="{% url 'list' %}">All Entries</a>
+    <a href="{% url 'edit' entry.id %}">Edit this Entry</a>
 </ul>
 {% else %}
     <div>Entry does not exist</div>

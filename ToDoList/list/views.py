@@ -3,14 +3,9 @@ from django.http import HttpResponseBadRequest
 from django.urls import reverse
 from django import forms
 from .models import ListModel
+from .forms import EntryFormBuilder, EditSelectForm
 
 # Create your views here.
-
-class NewEntryForm(forms.Form):
-    title = forms.CharField(label="Title",max_length=32, required=True)
-    description = forms.CharField(label="Description", required=True)
-    priority = forms.IntegerField(label="Priority", min_value=1, max_value=3, required=True)
-    due_date = forms.DateField(label="Due Date",required=True,  widget=forms.DateInput(attrs={'type': 'date'}))
 
 def index(request):
     return render(request, "list/index.html")
@@ -25,9 +20,10 @@ def entry_add(request):
     callback = request.GET.get('callback', 'list')
     if request.method == "GET":
         # add a new entry
-        return render(request, "list/entry_add.html", {
-            "form": NewEntryForm(),
-            "callback": callback
+        return render(request, "list/entry_edit.html", {
+            "form": EntryFormBuilder().title().description().priority().due_date().build(),
+            "callback": callback,
+            "entry_add": True
         })
     if request.method == "POST":
         title = request.POST.get('title')
@@ -35,8 +31,9 @@ def entry_add(request):
         priority = request.POST.get('priority')
         due_date = request.POST.get('due_date')
         if not title or not description or not priority or not due_date:
-            return render(request, "list/entry_add.html", {
-                "aux_message": "Any value can't be empty. Please try again."
+            return render(request, "list/entry_edit.html", {
+                "aux_message": "Any value can't be empty. Please try again.",
+                "entry_add": True
             })
         ListModel.objects.create(
             title=title,
@@ -49,8 +46,44 @@ def entry_add(request):
     return HttpResponseBadRequest("Invalid request method.")
 
 
-def entry_done(request):
-    pass
+def entry_edit(request, entry_id):
+    entry = ListModel.objects.filter(id=entry_id)
+    if not entry:
+        return HttpResponseBadRequest("entry doesn't exist")
+    entry = entry.first()
+
+    if request.method == 'GET':
+        request.session["is_select"] = False
+        return render(request, "list/edit_element_select.html", {
+            "form": EditSelectForm(),
+            "entry": entry
+        })
+
+    elif request.method == "POST" and request.session["is_select"] is False:
+        edit_select_form = EditSelectForm(request.POST)
+        if edit_select_form.is_valid():
+            editable_fields = edit_select_form.cleaned_data['choices']
+            request.session["is_select"] = True
+            return render(request, "list/entry_edit.html", {
+                "editable": editable_fields,
+                "form": EntryFormBuilder().include_fields(editable_fields).build(),
+                "id": entry.id
+            })
+        else:
+            # Error in form, return to the select form with errors
+            return render(request, "list/edit_element_select.html", {
+                "form": edit_select_form,
+                "entry": entry
+            })
+
+    elif request.method == "POST" and request.session["is_select"] is True:
+        entry.title = request.POST.get('title', entry.title)
+        entry.description = request.POST.get('description', entry.description)
+        entry.priority = request.POST.get('priority', entry.priority)
+        entry.due_date = request.POST.get('due_date', entry.due_date)
+        entry.save()
+        return redirect("entry", entry_id=entry.id)
+
 
 def entry(request, entry_id):
     return render(request, "list/entry.html", {

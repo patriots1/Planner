@@ -1,0 +1,24 @@
+{% extends 'list/layout.html' %}
+{% block body %}
+<h1>Edit Entry</h1>
+<h3>Current Entry</h3>
+<ul>
+    <li>Title: {{ entry.title }}</li>
+    <li>Description: {{ entry.description }}</li>
+    <li>Priority: {{ entry.priority }}</li>
+    <li>Due Date: {{ entry.due_date }}</li>
+</ul>
+
+<!-- <p>{% url 'edit' entry.id %}</p>
+<p>Entry ID: {{ entry.id }}</p> -->
+<form action="{% url 'edit' entry.id %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type = "submit">
+</form>
+<!-- <form action="{% url 'edit' 1 %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type = "submit">
+</form> -->
+{% endblock %}
