@@ -1,0 +1,11 @@
+{% extends 'list/layout.html' %}
+{% block body %}
+<h1>{{ entry }}</h1>
+<ul>
+    <li>Title: {{ entry.title }}</li>
+    <li>Description: {{ entry.description }}</li>
+    <li>Priority: {{ entry.priority }}</li>
+    <li>Due Date: {{ entry.due_date }}</li>
+    <a href="{% url 'list' %}">All Entries</a>
+</ul>
+{% endblock %}

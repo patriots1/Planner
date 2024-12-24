@@ -4,7 +4,9 @@
 
 <ul>
     {% for entry in content %}
-        <li>{{ entry }}</li>
+        <li>
+            <a href="{% url 'entry' entry.id %}">{{ entry }}</a>
+        </li>
         {% empty %} <!--to indicate an empty list-->
             <li>Please add tasks to To Do List</li>
     {% endfor %}

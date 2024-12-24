@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponseBadRequest
 from .models import ListModel
 
 # Create your views here.
@@ -10,4 +11,6 @@ def list_view(request):
 
 
 def entry(request, entry_id):
-    pass
+    return render(request, "list/entry.html", {
+        "entry": ListModel.objects.filter(id = entry_id).first()
+    })
