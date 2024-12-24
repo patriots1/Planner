@@ -1,0 +1,16 @@
+{% extends 'ToDoList/layout.html' %}
+
+{% block body %}
+    <h1>Sign Up</h1>
+    {% if aux_message %}
+        <h3>{{ aux_message }}</h3>
+    {% endif %}
+    <form action = "{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <h3>{{ list_header }}</h3>
+        <input type="password" name="password" min = "1" placeholder="Password">
+        <h3>{{ hint_support }}</h3>
+        <input type="text" name="hint" min = "1" max = "64" placeholder="Hint">
+        <input type="submit" value = "Login">
+    </form>
+{% endblock %}
