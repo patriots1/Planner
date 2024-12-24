@@ -62,7 +62,7 @@ def user_login(request):
             if counter > 3:
                 hint = UserModel.objects.filter(user__username="admin").first().hint
                 return render(request, "ToDoList/login.html", {
-                    "aux_message": f"Hint: {hint}",
+                    "aux_message": f"Invalid password, please try again. Hint: {hint}",
                     "list_header": existing_list_header,
                 })
             else:
