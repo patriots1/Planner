@@ -1,0 +1,12 @@
+{% extends 'list/layout.html' %}
+{% block body %}
+<h1>All Content</h1>
+
+<ul>
+    {% for entry in content %}
+        <li>{{ entry }}</li>
+        {% empty %} <!--to indicate an empty list-->
+            <li>Please add tasks to To Do List</li>
+    {% endfor %}
+</ul>
+{% endblock %}

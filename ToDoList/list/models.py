@@ -7,3 +7,6 @@ class ListModel(models.Model):
     description = models.TextField()
     priority = models.IntegerField()
     due_date = models.DateField()
+
+    def __str__(self):
+        return self.title
