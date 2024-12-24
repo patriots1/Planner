@@ -10,5 +10,6 @@
         {% empty %} <!--to indicate an empty list-->
             <li>Please add tasks to To Do List</li>
     {% endfor %}
+    <a href="{% url 'add' %}?callback=list">Add a new entry</a>
 </ul>
 {% endblock %}

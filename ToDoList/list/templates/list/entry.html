@@ -1,6 +1,8 @@
 {% extends 'list/layout.html' %}
 {% block body %}
 <h1>{{ entry }}</h1>
+
+{% if entry %}
 <ul>
     <li>Title: {{ entry.title }}</li>
     <li>Description: {{ entry.description }}</li>
@@ -8,4 +10,7 @@
     <li>Due Date: {{ entry.due_date }}</li>
     <a href="{% url 'list' %}">All Entries</a>
 </ul>
+{% else %}
+    <div>Entry does not exist</div>
+{% endif %}
 {% endblock %}
