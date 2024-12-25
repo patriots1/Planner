@@ -1,0 +1,24 @@
+{% extends 'list/layout.html' %}
+{% block body %}
+<h1>Sort by Date</h1>
+{% if msg %}
+    <h3>{{ msg }}</h3>
+{% endif %}
+<form action="{% url 'date' %}" method="post">
+    {% csrf_token %}
+    {{ sort_form }}
+    <input type="submit">
+</form>
+{% if content %}
+    <ul>
+    {% for entry in content %}
+        <li>
+            <a href="{% url 'entry' entry.id %}">{{ entry }}</a>
+        </li>
+        {% empty %} <!--to indicate an empty list-->
+            <li>No task that matches this criteria exists</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

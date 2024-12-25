@@ -3,7 +3,7 @@ from django.http import HttpResponseBadRequest
 from django.urls import reverse
 from django import forms
 from .models import ListModel
-from .forms import EntryFormBuilder, EditSelectForm
+from .forms import EntryFormBuilder, EditSelectForm, DateSelectForm
 
 # Create your views here.
 
@@ -110,3 +110,42 @@ def priority_sort(request, priority):
         "callback": "priority",
         "priority": priority
     })
+
+def date_sort(request):
+    if request.method == 'GET':
+        return render(request, "list/date_sort_view.html", {
+            "msg": "Please select how you want to sort the To Do List",
+            "sort_form": DateSelectForm()
+        })
+    elif request.method == 'POST':
+        form = DateSelectForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.clean()
+            if cleaned_data.get('ascending') is True:
+                list_entries = ListModel.objects.order_by('due_date')
+                return render(request, "list/date_sort_view.html", {
+                    "msg": "Ascending Sort",
+                    "content": list_entries,
+                    "sort_form": DateSelectForm()
+                })
+            elif cleaned_data.get('descending') is True:
+                list_entries = ListModel.objects.order_by('-due_date')
+                return render(request, "list/date_sort_view.html", {
+                    "msg": "Descending Sort",
+                    "content": list_entries,
+                    "sort_form": DateSelectForm()
+                })
+            elif cleaned_data.get('date_sort') is not None:
+                list_entries = ListModel.objects.filter(due_date = cleaned_data.get('date_sort'))
+                return render(request, "list/date_sort_view.html", {
+                    "msg": f"Sort for {cleaned_data.get('date_sort')}",
+                    "content": list_entries,
+                    "sort_form": DateSelectForm()
+                })
+        else:
+            return render(request, "list/date_sort_view.html", {
+                "msg": "Error",
+                "sort_form": form
+            })
+    return HttpResponseBadRequest("route not supported")
+
