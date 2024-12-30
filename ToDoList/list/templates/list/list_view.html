@@ -12,9 +12,12 @@
     {% endfor %}
     {% if priority %}
         <a href="{% url 'add' %}?callback={{ callback|urlencode }}?priority={{ priority|urlencode }}">Add a new entry</a>
+        <a href="{% url 'remove' priority %}">Mark entries as complete</a>
     {% else %}
-        <a href="{% url 'add' %}?callback={{ callback|urlencode }}">Add a new entry</a>
+        {% if callback %}
+            <a href="{% url 'add' %}?callback={{ callback|urlencode }}">Add a new entry</a>
+            <a href="{% url 'remove' callback  %}">Mark entries as complete</a>
+        {% endif %}
     {% endif %}
-    <div>Remove entries from to-do list</div> <!--enable support for this-->
 </ul>
 {% endblock %}

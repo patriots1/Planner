@@ -19,6 +19,7 @@
             <li>No task that matches this criteria exists</li>
     {% endfor %}
     </ul>
+    <a href="{% url 'remove' msg %}">Mark tasks as complete</a>
 {% endif %}
 
 {% endblock %}

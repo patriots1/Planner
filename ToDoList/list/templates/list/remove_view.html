@@ -1,0 +1,10 @@
+{% extends 'list/layout.html' %}
+{% block body %}
+<h1>Remove Tasks</h1>
+
+<form action = "{% url 'remove' type %}" method="post">
+    {% csrf_token %}
+    {{ form }} 
+    <button type="submit">Remove Selected Tasks</button>
+</form>
+{% endblock %}
