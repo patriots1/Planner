@@ -1,0 +1,17 @@
+{% extends 'list/layout.html' %}
+{% block body %}
+
+<h1>Index</h1>
+<ul>
+    <li>
+        <a href="{% url 'list' %}">View all entries</a>
+        <!--High Priority = Red , Medium Priority = Yellow ... -->
+        <li>View entries by date</li>
+        <li>View High Priority entries</li>
+        <li>View Medium Priority entries</li>
+        <li>View Low Priority entries</li>
+        <li>View completed entries</li>
+    </li>
+</ul>
+
+{% endblock %}
