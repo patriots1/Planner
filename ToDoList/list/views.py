@@ -110,13 +110,13 @@ def priority_sort(request, priority):
     content = None
     title = None
     if priority == 1:
-        content = ListModel.objects.filter(priority = 1)
+        content = ListModel.objects.filter(priority = 1, is_complete = False)
         title = "Low Priority Tasks"
     elif priority == 2:
-        content = ListModel.objects.filter(priority = 2)
+        content = ListModel.objects.filter(priority = 2, is_complete = False)
         title = "Medium Priority Tasks"
     elif priority == 3:
-        content = ListModel.objects.filter(priority = 3)
+        content = ListModel.objects.filter(priority = 3, is_complete = False)
         title = "High Priority Tasks"
     return render(request, "list/list_view.html", {
         "content": content,
@@ -167,114 +167,45 @@ def date_sort(request):
 def remove(request, type):
     if request.method == 'GET':
             # display relevant tasks for selection
+            print(f"type = {type}")
             return render(request, "list/remove_view.html", {
-                'form': RemoveSelectionForm(type = type),
+                'form': RemoveSelectionForm(type = str(type)),
                 'type': type
             })
-    if type == 'list':
-        # tasks from 'all content'
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                return redirect('list')
-            else:
-                return render(request, "list/remove_view.html", {
-                'form': form,
-                'type': type
-            })
-    elif type == '3':
-        # tasks from high prority
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                return redirect('priority', priority = 3)
-            else:
-                return render(request, "list/remove_view.html", {
-                'form': form,
-                'type': type
-            })
-    elif type == '2':
-        # tasks from medium prority
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                return redirect('priority', priority = 2)
-            else:
-                return render(request, "list/remove_view.html", {
-                'form': form,
-                'type': type
-            })
-    elif type == '1':
-        # tasks from low prority
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                return redirect('priority', priority = 1)
-            else:
-                return render(request, "list/remove_view.html", {
-                'form': form,
-                'type': type
-            })
-    elif type == 'Ascending Sort':
-        # sort closest date first
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                list_entries = ListModel.objects.order_by('due_date').filter(is_complete = False)
-                return render(request, "list/date_sort_view.html", {
+    elif request.method == 'POST':
+        form = RemoveSelectionForm(data=request.POST, type = type)
+        if form.is_valid():
+            completed_tasks = form.cleaned_data['tasks']
+            completed_tasks.update(is_complete = True)
+            match type:
+                case 'list':
+                    return redirect('list')
+                case '3' | '2' | '1':
+                    return redirect('priority', priority = int(type))
+                case 'Ascending Sort':
+                    list_entries = ListModel.objects.order_by('due_date').filter(is_complete = False)
+                    return render(request, "list/date_sort_view.html", {
                     "msg": "Ascending Sort",
                     "content": list_entries,
                     "sort_form": DateSelectForm()
                 })
-            else:
-                return render(request, "list/remove_view.html", {
-                'form': form,
-                'type': type
-            })
-    elif type == 'Descending Sort':
-        # sort farthest date first
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                list_entries = ListModel.objects.order_by('-due_date').filter(is_complete = False)
-                return render(request, "list/date_sort_view.html", {
-                    "msg": "Ascending Sort",
+                case 'Descending Sort':
+                    list_entries = ListModel.objects.order_by('-due_date').filter(is_complete = False)
+                    return render(request, "list/date_sort_view.html", {
+                    "msg": "Descending Sort",
                     "content": list_entries,
                     "sort_form": DateSelectForm()
                 })
-            else:
-                return render(request, "list/remove_view.html", {
-                'form': form,
-                'type': type
-            })
-    else:
-        # sort for a specific date
-        if request.method == 'POST':
-            form = RemoveSelectionForm(data=request.POST, type = type)
-            if form.is_valid():
-                completed_tasks = form.cleaned_data['tasks']
-                completed_tasks.update(is_complete = True)
-                type_ls = type.split(" ")
-                list_entries = ListModel.objects.filter(due_date = datetime.strptime(type_ls[2], "%Y-%m-%d").date()).filter(is_complete = False)
-                return render(request, "list/date_sort_view.html", {
-                    "msg": type,
-                    "content": list_entries,
-                    "sort_form": DateSelectForm()
-                })
-            else:
-                return render(request, "list/remove_view.html", {
+                case _:
+                    type_ls = type.split(" ")
+                    list_entries = ListModel.objects.filter(due_date = datetime.strptime(type_ls[2], "%Y-%m-%d").date(), is_complete = False)
+                    return render(request, "list/date_sort_view.html", {
+                        "msg": type,
+                        "content": list_entries,
+                        "sort_form": DateSelectForm()
+                    })
+        else:
+            return render(request, "list/remove_view.html", {
                 'form': form,
                 'type': type
             })

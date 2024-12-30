@@ -111,11 +111,11 @@ class RemoveSelectionForm(forms.Form):
         if type == 'list':
             print("all being activated")
             self.fields['tasks'].queryset = ListModel.objects.filter(is_complete = False)
-        elif type == 'hp':
+        elif type == '3':
             self.fields['tasks'].queryset = ListModel.objects.filter(priority=3).filter(is_complete = False)
-        elif type == 'mp':
+        elif type == '2':
             self.fields['tasks'].queryset = ListModel.objects.filter(priority=2).filter(is_complete = False)
-        elif type == 'lp':
+        elif type == '1':
             self.fields['tasks'].queryset = ListModel.objects.filter(priority=1).filter(is_complete = False)
         elif type == 'Ascending Sort':
             self.fields['tasks'].queryset = ListModel.objects.order_by('due_date').filter(is_complete = False)
