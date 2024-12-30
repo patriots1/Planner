@@ -2,27 +2,27 @@
 {% block body %}
 
 <h1>Index</h1>
-<ul>
-    <li>
-        <a href="{% url 'list' %}">View all entries</a>
+<ul class="list-group">
+        <li class="list-group-item">
+            <a href="{% url 'list' %}" class="list-group-item list-group-item-action">View all entries</a>
+        </li>
         <!--High Priority = Red , Medium Priority = Yellow ... -->
-        <li>
-            <a href="{% url 'date' %}">View entries by date</a>
+        <li class="list-group-item">
+            <a href="{% url 'date' %}" class="list-group-item list-group-item-action">View entries by date</a>
         </li>
         <!-- <li>View High Priority entries</li> -->
-        <li>
-            <a href="{% url 'priority' 3 %}">View High Priority entries</a>
+        <li class="list-group-item">
+            <a href="{% url 'priority' 3 %}" class="list-group-item list-group-item-action">View High Priority entries</a>
         </li>
-        <li>
-            <a href="{% url 'priority' 2 %}">View Medium Priority entries</a>
+        <li class="list-group-item">
+            <a href="{% url 'priority' 2 %}" class="list-group-item list-group-item-action">View Medium Priority entries</a>
         </li>
-        <li>
-            <a href="{% url 'priority' 1 %}">View Low Priority entries</a>
+        <li class="list-group-item">
+            <a href="{% url 'priority' 1 %}" class="list-group-item list-group-item-action">View Low Priority entries</a>
         </li>
-        <li>
-            <a href="{% url 'complete' %}">View completed entries</a>
+        <li class="list-group-item">
+            <a href="{% url 'complete' %}" class="list-group-item list-group-item-action">View completed entries</a>
         </li>
-    </li>
 </ul>
 
 {% endblock %}
