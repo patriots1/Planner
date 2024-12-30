@@ -2,15 +2,18 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseBadRequest
 from django.urls import reverse
 from django import forms
+from django.contrib.auth.decorators import login_required
 from .models import ListModel
 from .forms import *
 from datetime import datetime
 
-# Create your views here.
 
+# Create your views here.
+@login_required(login_url='/')
 def index(request):
     return render(request, "list/index.html")
 
+@login_required(login_url='/')
 def list_view(request):
     return render(request, "list/list_view.html", {
         "content": ListModel.objects.filter(is_complete = False),
@@ -18,12 +21,14 @@ def list_view(request):
         "title": "Current Tasks"
     })
 
+@login_required(login_url='/')
 def complete_list_view(request):
     return render(request, "list/list_view.html", {
         "content": ListModel.objects.filter(is_complete = True),
         "title": "Completed Tasks"
     })
 
+@login_required(login_url='/')
 def entry_add(request):
     # render 'list' if no callback is provided
     callback = request.GET.get('callback', 'list')
@@ -59,7 +64,7 @@ def entry_add(request):
 
     return HttpResponseBadRequest("Invalid request method.")
 
-
+@login_required(login_url='/')
 def entry_edit(request, entry_id):
     entry = ListModel.objects.filter(id=entry_id)
     if not entry:
@@ -98,12 +103,13 @@ def entry_edit(request, entry_id):
         entry.save()
         return redirect("entry", entry_id=entry.id)
 
-
+@login_required(login_url='/')
 def entry(request, entry_id):
     return render(request, "list/entry.html", {
         "entry": ListModel.objects.filter(id = entry_id).first()
     })
 
+@login_required(login_url='/')
 def priority_sort(request, priority):
     if priority < 1 or priority > 3:
         return HttpResponseBadRequest("priority can only be between 1 (low) and 3 (high)")
@@ -125,6 +131,7 @@ def priority_sort(request, priority):
         "title": title
     })
 
+@login_required(login_url='/')
 def date_sort(request):
     if request.method == 'GET':
         return render(request, "list/date_sort_view.html", {
@@ -163,7 +170,7 @@ def date_sort(request):
             })
     return HttpResponseBadRequest("route not supported")
 
-
+@login_required(login_url='/')
 def remove(request, type):
     if request.method == 'GET':
             # display relevant tasks for selection
@@ -222,8 +229,7 @@ def remove(request, type):
                 'type': type
             })
 
-
-
+@login_required(login_url='/')
 def discard(request):
     if request.method == 'GET':
             # display relevant tasks for selection

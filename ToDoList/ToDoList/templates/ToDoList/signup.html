@@ -8,9 +8,9 @@
     <form action = "{% url 'login' %}" method="post">
         {% csrf_token %}
         <h3>{{ list_header }}</h3>
-        <input type="password" name="password" min = "1" placeholder="Password">
+        <input type="password" name="password" min = "1" placeholder="Password" class="form-control">
         <h3>{{ hint_support }}</h3>
-        <input type="text" name="hint" min = "1" max = "64" placeholder="Hint">
+        <input type="text" name="hint" min = "1" max = "64" placeholder="Hint" class="form-control">
         <input type="submit" value = "Login">
     </form>
 {% endblock %}

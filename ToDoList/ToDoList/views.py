@@ -70,3 +70,8 @@ def user_login(request):
                     "aux_message": "Invalid password. Please try again.",
                     "list_header": existing_list_header,
                 })
+            
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('startup'))
