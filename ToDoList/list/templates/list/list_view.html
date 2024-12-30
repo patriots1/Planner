@@ -23,6 +23,6 @@
     {% endif %}
 {% endif %}
 {% if title == 'Completed Tasks' %}
-    <a href="{% url 'discard' %}">Discard Completed Entries</a>
+    <a href="{% url 'discard' %}" class="btn btn-secondary" style="margin-top: 10px;">Discard Completed Entries</a>
 {% endif %}
 {% endblock %}

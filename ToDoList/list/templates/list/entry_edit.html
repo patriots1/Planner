@@ -15,13 +15,13 @@
         <form action="{% url 'add' %}?callback={{ callback|urlencode }}" method="post">
             {% csrf_token %}
             {{ form }}
-            <input type="submit">
+            <input type="submit" class="btn btn-primary">
         </form>
     {% else %}
         <form action="{% url 'edit' id %}" method="post">
             {% csrf_token %}
             {{ form }}
-            <input type="submit">
+            <input type="submit" class="btn btn-primary">
         </form>
     {% endif %}
 {% endblock %}

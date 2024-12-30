@@ -8,7 +8,7 @@
 <form action="{% url 'date' %}" method="post">
     {% csrf_token %}
     {{ sort_form|crispy }}
-    <input type="submit">
+    <input type="submit" class="btn btn-primary">
 </form>
 {% if content %}
     <ul>
