@@ -121,11 +121,10 @@ class RemoveSelectionForm(forms.Form):
             self.fields['tasks'].queryset = ListModel.objects.order_by('due_date').filter(is_complete = False)
         elif type == 'Descending Sort':
             self.fields['tasks'].queryset = ListModel.objects.order_by('-due_date').filter(is_complete = False)
+        elif type == 'complete':
+            self.fields['tasks'].queryset = ListModel.objects.filter(is_complete = True)
         else:
-            try:
-                type_ls = type.split(" ") # type = 'Split for {date}' -> so need to split via spaces do get date
-                due_date = datetime.strptime(type_ls[2], "%Y-%m-%d").date()
-                self.fields['tasks'].queryset = ListModel.objects.filter(due_date=due_date).filter(is_complete = False)
-            except ValueError and TypeError:
-                pass
+            type_ls = type.split(" ") # type = 'Split for {date}' -> so need to split via spaces do get date
+            due_date = datetime.strptime(type_ls[2], "%Y-%m-%d").date()
+            self.fields['tasks'].queryset = ListModel.objects.filter(due_date=due_date).filter(is_complete = False)
 

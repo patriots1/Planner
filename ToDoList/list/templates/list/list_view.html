@@ -1,6 +1,6 @@
 {% extends 'list/layout.html' %}
 {% block body %}
-<h1>All Content</h1>
+<h1>{{ title }}</h1>
 
 <ul>
     {% for entry in content %}
@@ -20,4 +20,7 @@
         {% endif %}
     {% endif %}
 </ul>
+{% if title == 'Completed Tasks' %}
+    <a href="{% url 'discard' %}">Discard Completed Entries</a>
+{% endif %}
 {% endblock %}

@@ -1,8 +1,13 @@
 {% extends 'list/layout.html' %}
 {% block body %}
-<h1>Remove Tasks</h1>
 
-<form action = "{% url 'remove' type %}" method="post">
+{% if type %}
+    <h1>{{ type }}</h1>
+    <form action = "{% url 'remove' type %}" method="post">
+{% else %}
+    <h1>Discard Completed Tasks</h1>
+    <form action = "{% url 'discard' %}" method="post">
+{% endif %}
     {% csrf_token %}
     {{ form }} 
     <button type="submit">Remove Selected Tasks</button>

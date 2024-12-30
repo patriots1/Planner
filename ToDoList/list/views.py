@@ -14,12 +14,14 @@ def index(request):
 def list_view(request):
     return render(request, "list/list_view.html", {
         "content": ListModel.objects.filter(is_complete = False),
-        "callback": "list"
+        "callback": "list",
+        "title": "Current Tasks"
     })
 
 def complete_list_view(request):
     return render(request, "list/list_view.html", {
         "content": ListModel.objects.filter(is_complete = True),
+        "title": "Completed Tasks"
     })
 
 def entry_add(request):
@@ -106,16 +108,21 @@ def priority_sort(request, priority):
     if priority < 1 or priority > 3:
         return HttpResponseBadRequest("priority can only be between 1 (low) and 3 (high)")
     content = None
+    title = None
     if priority == 1:
         content = ListModel.objects.filter(priority = 1)
+        title = "Low Priority Tasks"
     elif priority == 2:
         content = ListModel.objects.filter(priority = 2)
+        title = "Medium Priority Tasks"
     elif priority == 3:
         content = ListModel.objects.filter(priority = 3)
+        title = "High Priority Tasks"
     return render(request, "list/list_view.html", {
         "content": content,
         "callback": "priority",
-        "priority": priority
+        "priority": priority,
+        "title": title
     })
 
 def date_sort(request):
@@ -160,7 +167,6 @@ def date_sort(request):
 def remove(request, type):
     if request.method == 'GET':
             # display relevant tasks for selection
-            print(f"GET: {type}")
             return render(request, "list/remove_view.html", {
                 'form': RemoveSelectionForm(type = type),
                 'type': type
@@ -276,4 +282,18 @@ def remove(request, type):
 
 
 def discard(request):
-    pass
+    if request.method == 'GET':
+            # display relevant tasks for selection
+            return render(request, "list/remove_view.html", {
+                'form': RemoveSelectionForm(type = 'complete')
+            })
+    elif request.method == 'POST':
+        form = RemoveSelectionForm(data=request.POST, type = 'complete')
+        if form.is_valid():
+            completed_tasks = form.cleaned_data['tasks']
+            completed_tasks.delete()
+            return redirect('complete')
+        else:
+            return render(request, "list/remove_view.html", {
+            'form': form,
+        })
