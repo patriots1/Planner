@@ -16,11 +16,12 @@
         <li>
             <a href="{% url 'entry' entry.id %}">{{ entry }}</a>
         </li>
-        {% empty %} <!--to indicate an empty list-->
-            <li>No task that matches this criteria exists</li>
     {% endfor %}
     </ul>
-    <a href="{% url 'remove' msg %}">Mark tasks as complete</a>
+{% else %}
+    <div class="alert alert-primary" role="alert" style="margin-top: 10px;">No Tasks Exist</div>
 {% endif %}
+
+<a href="{% url 'remove' msg %}" class="btn btn-warning">Mark tasks as complete</a>
 
 {% endblock %}
