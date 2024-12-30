@@ -167,10 +167,22 @@ def date_sort(request):
 def remove(request, type):
     if request.method == 'GET':
             # display relevant tasks for selection
-            print(f"type = {type}")
+            title = None
+            match type:
+                case '3':
+                    title = "High Priority"
+                case '2': 
+                    title = "Medium Priority"
+                case '1':
+                    title = "Low Priority"
+                case 'list':
+                    title = "Current Tasks"
+                case _:
+                    title = type
             return render(request, "list/remove_view.html", {
                 'form': RemoveSelectionForm(type = str(type)),
-                'type': type
+                'type': type,
+                'title': title
             })
     elif request.method == 'POST':
         form = RemoveSelectionForm(data=request.POST, type = type)

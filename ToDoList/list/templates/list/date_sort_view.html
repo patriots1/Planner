@@ -1,4 +1,5 @@
 {% extends 'list/layout.html' %}
+{% load crispy_forms_tags %}
 {% block body %}
 <h1>Sort by Date</h1>
 {% if msg %}
@@ -6,7 +7,7 @@
 {% endif %}
 <form action="{% url 'date' %}" method="post">
     {% csrf_token %}
-    {{ sort_form }}
+    {{ sort_form|crispy }}
     <input type="submit">
 </form>
 {% if content %}

@@ -83,8 +83,8 @@ class EditSelectForm(forms.Form):
 
 class DateSelectForm(forms.Form):
     ascending = forms.BooleanField(label="Ascending", required=False)
-    date_sort = forms.DateField(label="Due Date", widget=forms.DateInput(attrs={'type': 'date'}), required=False)
     descending = forms.BooleanField(label="Descending", required=False)
+    date_sort = forms.DateField(label="Due Date", widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 
     def clean(self):
         cleaned_data = super().clean()

@@ -1,15 +1,16 @@
 {% extends 'list/layout.html' %}
+{% load crispy_forms_tags %}
 {% block body %}
 
 {% if type %}
-    <h1>{{ type }}</h1>
+    <h1>{{ title }}</h1>
     <form action = "{% url 'remove' type %}" method="post">
 {% else %}
     <h1>Discard Completed Tasks</h1>
     <form action = "{% url 'discard' %}" method="post">
 {% endif %}
     {% csrf_token %}
-    {{ form }} 
-    <button type="submit">Remove Selected Tasks</button>
+    {{ form|crispy }} 
+    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Remove Selected Tasks</button>
 </form>
 {% endblock %}
